@@ -46,7 +46,7 @@ void cityBlock(pcl::visualization::PCLVisualizer::Ptr& viewer, ProcessPointCloud
     // Experiment with the ? values and find what works best
     pcl::PointCloud<pcl::PointXYZI>::Ptr filterCloud = pointProcessorI->FilterCloud(inputCloud, 0.15 , Eigen::Vector4f (-10, -5, -2, 1), Eigen::Vector4f ( 30, 8, 1, 1));
 
-    std::pair<pcl::PointCloud<pcl::PointXYZI>::Ptr, pcl::PointCloud<pcl::PointXYZI>::Ptr> segmentCloud = pointProcessorI->SegmentPlane(
+    std::pair<pcl::PointCloud<pcl::PointXYZI>::Ptr, pcl::PointCloud<pcl::PointXYZI>::Ptr> segmentCloud = pointProcessorI->SegmentPlaneUsingRansac3D(
             filterCloud, 25, 0.3);
 
     std::vector<pcl::PointCloud<pcl::PointXYZI>::Ptr> cloudClusters = pointProcessorI->Clustering(segmentCloud.first, 0.3, 10, 1000);
@@ -200,7 +200,7 @@ int main(int argc, char **argv) {
         streamIterator++;
         if(streamIterator==stream.end())
             streamIterator = stream.begin();
-        viewer->saveScreenshot("media/obstacleDetectionFPS" + std::to_string(i++) + ".png");
+        //viewer->saveScreenshot("media/obstacleDetectionFPS" + std::to_string(i++) + ".png");
         viewer->spinOnce();
 
     }
