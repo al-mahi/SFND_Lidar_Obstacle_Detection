@@ -49,16 +49,16 @@ void cityBlock(pcl::visualization::PCLVisualizer::Ptr& viewer, ProcessPointCloud
     std::pair<pcl::PointCloud<pcl::PointXYZI>::Ptr, pcl::PointCloud<pcl::PointXYZI>::Ptr> segmentCloud = pointProcessorI->SegmentPlaneUsingRansac3D(
             filterCloud, 25, 0.3);
 
-    std::vector<pcl::PointCloud<pcl::PointXYZI>::Ptr> cloudClusters = pointProcessorI->Clustering(segmentCloud.first, 0.3, 10, 1000);
+    std::vector<pcl::PointCloud<pcl::PointXYZI>::Ptr> cloudClusters = pointProcessorI->ClusteringEuclideanUsingKDtree(segmentCloud.first, .44, 3, 1000);
 
     int clusterId = 0;
-    std::vector<Color> colors = {Color(1,0,0), Color(1,1,0), Color(0,0,1)};
+    std::vector<Color> colors = {Color(1,0,0), Color(1,1,0), Color(0,0,1), Color(.3,0.5,1)};
     /*Render the objects along with bounding boxes to the viewer*/
     for(pcl::PointCloud<pcl::PointXYZI>::Ptr cluster : cloudClusters)
     {
         std::cout << "cluster size ";
         pointProcessorI->numPoints(cluster);
-        renderPointCloud(viewer,cluster,"obstCloud"+std::to_string(clusterId),colors[clusterId%3]);
+        renderPointCloud(viewer,cluster,"obstCloud"+std::to_string(clusterId),colors[clusterId%4]);
 
         Box box = pointProcessorI->BoundingBox(cluster);
         renderBox(viewer,box,clusterId);
